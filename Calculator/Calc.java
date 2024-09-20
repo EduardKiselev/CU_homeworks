@@ -33,8 +33,8 @@ public class Calc {
                     case ')' -> {
                         try{
                             calculateInBraskets(StackOperator, StackNums);
-                            System.out.println(StackNums);
-                            System.out.println(StackOperator);
+                    //        System.out.println(StackNums);
+                    //        System.out.println(StackOperator);
                         }
                         catch (NoSuchElementException er) {
                             System.out.println("Can't Parse - NoSuchElementException");
