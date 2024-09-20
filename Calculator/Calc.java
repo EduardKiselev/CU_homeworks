@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 public class Calc {
     public static void main(String[] args) {
@@ -6,7 +7,12 @@ public class Calc {
         var StackNums = new ArrayList<Double>();
         var StackOperator = new ArrayList<Operations>();
         String ParseTmp = "";
-        for (char CurrChar : arr) {
+        for (int i=0;i<arr.length;i++) {
+            char CurrChar = arr[i];
+            if(CurrChar=='f' || CurrChar=='d'){
+                System.out.println("ParseError");
+                return;
+            }
             if (CurrChar == '*' || CurrChar == '-' || CurrChar == '+' || CurrChar == '/' || CurrChar == '(' || CurrChar == ')') {
                 if (!ParseTmp.isEmpty()) {
                     try {
@@ -24,7 +30,17 @@ public class Calc {
                     case '*' -> StackOperator.add(Operations.MULTIPLY);
                     case '/' -> StackOperator.add(Operations.DIVISION);
                     case '(' -> StackOperator.add(Operations.OPENBRACKET);
-                    case ')' -> calculateInBraskets(StackOperator, StackNums);
+                    case ')' -> {
+                        try{
+                            calculateInBraskets(StackOperator, StackNums);
+                            System.out.println(StackNums);
+                            System.out.println(StackOperator);
+                        }
+                        catch (NoSuchElementException er) {
+                            System.out.println("Can't Parse - NoSuchElementException");
+                            return;
+                        }
+                    }
                     default -> {
                     }
                 }
@@ -95,7 +111,7 @@ public class Calc {
             case Operations.DIVISION -> {
                 if(Math.abs(num1-0)<Math.pow(10,-8)) {
                     throw new ArithmeticException("ZeroDivision");}
-                return (num1 / num2);
+                return (num2 / num1);
             }
             default -> {return 0;}
         }
