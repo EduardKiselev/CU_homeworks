@@ -36,8 +36,8 @@ public class Calc {
                     //        System.out.println(StackNums);
                     //        System.out.println(StackOperator);
                         }
-                        catch (NoSuchElementException er) {
-                            System.out.println("Can't Parse - NoSuchElementException");
+                        catch (NoSuchElementException | IndexOutOfBoundsException er) {
+                            System.out.println("Can't Parse: "+er);
                             return;
                         }
                     }
@@ -101,6 +101,7 @@ public class Calc {
         str = new StringBuilder("(" + str + ")");
         System.out.println(str);
         return str.toString().toCharArray();
+
     }
 
     public static double calcOneOperation(Operations op, double num2, double num1) {
@@ -123,4 +124,7 @@ enum Operations {
     MINUS,
     DIVISION,
     MULTIPLY,
-    OPENBRACKET};
+    OPENBRACKET
+};
+
+
