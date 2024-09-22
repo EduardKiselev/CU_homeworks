@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
-import static java.lang.Math.round;
-
 public class Calc {
     public static void main(String[] args) {
         char[] arr = stringToArrayConvertion(args);
@@ -35,8 +33,6 @@ public class Calc {
                     case ')' -> {
                         try{
                             calculateInBraskets(StackOperator, StackNums);
-                    //        System.out.println(StackNums);
-                    //        System.out.println(StackOperator);
                         }
                         catch (NoSuchElementException | IndexOutOfBoundsException er) {
                             System.out.println("Can't Parse: "+er);
