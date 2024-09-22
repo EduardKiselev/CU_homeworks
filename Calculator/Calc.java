@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
+import static java.lang.Math.round;
+
 public class Calc {
     public static void main(String[] args) {
         char[] arr = stringToArrayConvertion(args);
@@ -48,8 +50,8 @@ public class Calc {
             }
             ParseTmp += CurrChar;
         }
-        System.out.print("Result is: ");
-        System.out.println(StackNums.getFirst());
+        String result = String.format("%.2f",StackNums.getFirst());
+        System.out.println(result);
     }
 
     public static void calculateInBraskets(ArrayList<Operations> StackOperator, ArrayList<Double> StackNums) {
@@ -99,7 +101,6 @@ public class Calc {
             }
         }
         str = new StringBuilder("(" + str + ")");
-        System.out.println(str);
         return str.toString().toCharArray();
 
     }
