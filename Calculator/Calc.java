@@ -10,7 +10,7 @@ public class Calc {
         for (int i=0;i<arr.length;i++) {
             char CurrChar = arr[i];
             if(CurrChar=='f' || CurrChar=='d'){
-                System.out.println("ParseError");
+                System.out.println("ParseError - fd");
                 return;
             }
             if (CurrChar == '*' || CurrChar == '-' || CurrChar == '+' || CurrChar == '/' || CurrChar == '(' || CurrChar == ')') {
@@ -24,27 +24,29 @@ public class Calc {
                         return;
                     }
                 }
-                switch (CurrChar) {
-                    case '+' -> StackOperator.add(Operations.PLUS);
-                    case '-' -> StackOperator.add(Operations.MINUS);
-                    case '*' -> StackOperator.add(Operations.MULTIPLY);
-                    case '/' -> StackOperator.add(Operations.DIVISION);
-                    case '(' -> StackOperator.add(Operations.OPENBRACKET);
-                    case ')' -> {
-                        try{
-                            calculateInBraskets(StackOperator, StackNums);
+                    switch (CurrChar) {
+                        case '+' -> StackOperator.add(Operations.PLUS);
+                        case '-' -> StackOperator.add(Operations.MINUS);
+                        case '*' -> StackOperator.add(Operations.MULTIPLY);
+                        case '/' -> StackOperator.add(Operations.DIVISION);
+                        case '(' -> StackOperator.add(Operations.OPENBRACKET);
+                        case ')' -> {
+                            try {
+                                calculateInBraskets(StackOperator, StackNums);
+                            } catch (NoSuchElementException | IndexOutOfBoundsException er) {
+                                System.out.println("Can't Parse: " + er);
+                                return;
+                            }
+                            System.out.println("StackNums = " + StackNums);
+                            System.out.println("StackOperator = " + StackOperator);
                         }
-                        catch (NoSuchElementException | IndexOutOfBoundsException er) {
-                            System.out.println("Can't Parse: "+er);
-                            return;
+                        default -> {
                         }
                     }
-                    default -> {
-                    }
-                }
-                continue;
+                    continue;
             }
             ParseTmp += CurrChar;
+            System.out.println("ParseTmp = " + ParseTmp);
         }
         String result = String.format("%.2f",StackNums.getFirst());
         System.out.println(result);
@@ -86,17 +88,23 @@ public class Calc {
 
     public static char[] stringToArrayConvertion(String[] args){
         StringBuilder str = new StringBuilder();
+        str.append("(");
         for (String arg : args) {
             if(!arg.isEmpty()){
                 char[] arg_arr = arg.toCharArray();
-                for (char ch: arg_arr) {
+                for (int i=0;i< arg_arr.length;i++) {
+                    var ch = arg_arr[i];
                     if (ch != ' ') {
-                        str.append(ch);
+                        if (ch=='-' && (i==0 || arg_arr[i-1]=='(')) {
+                            str.append("0-");
+                        }
+                        else {
+                        str.append(ch);}
                     }
                 }
             }
         }
-        str = new StringBuilder("(" + str + ")");
+        str = new StringBuilder(str + ")");
         return str.toString().toCharArray();
 
     }
