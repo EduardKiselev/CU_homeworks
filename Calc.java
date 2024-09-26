@@ -1,13 +1,13 @@
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.NoSuchElementException;
 
 public class Calc {
     public static void main(String[] args) {
         char[] arr = StringToArrayConvertion(args);
-        var StackNums = new ArrayList<Double>();
-        var StackOperator = new ArrayList<Operations>();
+        var StackNums = new ArrayDeque<Double>();
+        var StackOperator = new ArrayDeque<Operations>();
         String ParseTmp = "";
-        boolean flag_parse_num = false;
+        boolean flagParseNum = false;
         for (int i = 0; i < arr.length; i++) {
             char CurrChar = arr[i];
 
@@ -18,7 +18,7 @@ public class Calc {
 //            System.out.print("  StackOperator = " + StackOperator);
 //            System.out.println("  StackNums = " + StackNums);
 
-            if (flag_parse_num) {
+            if (flagParseNum) {
                 if (ParseTmp.isEmpty()) {
                     ParseTmp += CurrChar;
                 } else {
@@ -38,7 +38,7 @@ public class Calc {
                             return;
                         }
                         ParseTmp = "";
-                        flag_parse_num = false;
+                        flagParseNum = false;
                         i--;
 
                     }
@@ -66,7 +66,7 @@ public class Calc {
                         return;
                     }
                 }
-                if (i < arr.length - 1 && (arr[i + 1] != '(' && CurrChar != ')')) flag_parse_num = true;
+                if (i < arr.length - 1 && (arr[i + 1] != '(' && CurrChar != ')')) flagParseNum = true;
             }
         }
         String result = String.format("%.2f",StackNums.getFirst());
@@ -74,7 +74,7 @@ public class Calc {
     }
 
     public static void CalculateInBraskets(
-            ArrayList<Operations> StackOperator, ArrayList<Double> StackNums) {
+            ArrayDeque<Operations> StackOperator, ArrayDeque<Double> StackNums) {
         double res = 0;
         while (true) {
             if (StackOperator.getLast() == Operations.OPENBRACKET) {
@@ -110,18 +110,14 @@ public class Calc {
 
     }
 
-    public static void CalcMultiplyDivision(ArrayList<Operations> StackOperator, ArrayList<Double> StackNums) {
+    public static void CalcMultiplyDivision(ArrayDeque<Operations> StackOperator, ArrayDeque<Double> StackNums) {
         while (!StackOperator.isEmpty() &&
                 (StackOperator.getLast() == Operations.DIVISION ||
                         StackOperator.getLast() == Operations.MULTIPLY)) {
-            var num1 = StackNums.getLast();
-            StackNums.removeLast();
-            var num2 = StackNums.getLast();
-            StackNums.removeLast();
-
+            var num1 = StackNums.pollLast();
+            var num2 = StackNums.pollLast();
             try {
-                StackNums.add(CalcOneOperation(StackOperator.getLast(), num2, num1));
-                StackOperator.removeLast();
+                StackNums.add(CalcOneOperation(StackOperator.pollLast(), num2, num1));
             } catch (ArithmeticException ae) {
                 System.out.println("Cant divide by zero");
                 throw ae;
